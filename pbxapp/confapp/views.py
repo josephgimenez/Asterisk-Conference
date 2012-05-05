@@ -13,18 +13,16 @@ def setLock(lockit, line):
     if (lockit):
         commands.getoutput("/usr/sbin/asterisk -r -x 'meetme lock %s'" % (line))
     else:
-        commands.getoutput("/usr/sbin/asterisk -r -x 'meetme unlock %s'" % (line)) 
+        commands.getoutput("/usr/sbin/asterisk -r -x 'meetme unlock %s'" % (line))
 
 def home(request):
     return render_to_response('index.html')
 
-def phones(request):
-    return render_to_response('conference/phone_status.html')
-    
+
 def conference(request):
     conf_count = 0
     locked = False
-	
+
     conference_info = []
 
     if 'kick' in request.GET:
@@ -46,12 +44,12 @@ def conference(request):
 
 
     conf = commands.getoutput("/usr/sbin/asterisk -r -x 'meetme'").split('\n')
-		
+
     for conference in conf[1:]:
     	conference_line = []
     	caller_line = []
     	caller_info = []
-		
+
         if "Total" not in conference:
             confline = re.search("^\d+", conference)
             #conference_data["line"] = confline.group(0)
@@ -89,4 +87,4 @@ def conference(request):
 
     return render_to_response('conference/index.html', \
 			{'conference_info' : conference_info, 'conf_count' : conf_count})
-    	
+
